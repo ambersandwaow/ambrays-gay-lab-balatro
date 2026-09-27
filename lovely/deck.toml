@@ -13,13 +13,21 @@ position = "before"
 payload = '''
 
 if G.GAME.selected_back.name == "Fuck My Stupid Chud Deck" then
-    if string.sub(v.key, 3, 6) == "blah" or string.sub(v.key, 1,4) == 'blah' then
+    if string.sub(v.key, 3, 8) == "ambray" or string.sub(v.key, 1,6) == 'ambray' then
         for i = 1, 4 do
             _pool[#_pool + 1] = v.key
             _pool_size = _pool_size + 1
         end
     end
 end
-'''
 
+if G.GAME.selected_back.name == "Yuri Deck" then
+    if string.sub(v.key, 3, 8) == "ambray" or string.sub(v.key, 1,6) == 'ambray' or string.sub(v.key, 1,4) == 'gaia' or string.sub(v.key, 1,4) == 'gaia' then
+        for i = 1, 3 do
+            _pool[#_pool + 1] = v.key
+            _pool_size = _pool_size + 1
+        end
+    end
+end
+'''
 match_indent = true

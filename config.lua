@@ -1,6 +1,9 @@
 return {
     extraGay = false,
     balanced = false,
+    stupid = false,
     musicR = false,
-    musicK = false
+    musicK = false,
+    pointless = false,
+    musicType = 1
 }

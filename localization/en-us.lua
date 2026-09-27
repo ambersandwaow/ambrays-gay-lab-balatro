@@ -1,7 +1,7 @@
 return {
     descriptions = {
         Joker = {
-            j_blah_eatRich = {
+            j_ambray_eatRich = {
                 name = 'Eat the Rich',
                 text = {
                     'Gives {C:money}$#1#{} at end',
@@ -9,7 +9,7 @@ return {
                     'you have over {C:money}$#2#{}'
                 }
             },
-            j_blah_diesel = {
+            j_ambray_diesel = {
                 name = 'Diesel',
                 text = {
                     {
@@ -24,7 +24,7 @@ return {
                     }
                 }
             },
-            j_blah_offPutting = {
+            j_ambray_offPutting = {
                 name = 'Off-Putting Joker',
                 text = {
                     {
@@ -41,7 +41,7 @@ return {
                     }
                 }
             },
-            j_blah_larva={
+            j_ambray_larva = {
                 name = 'Larva',
                 text = {
                     '{C:chips}+#3#{} chips',
@@ -49,47 +49,53 @@ return {
                     '{C:inactive}#2# remaining'
                 }
             },
-            j_blah_pupa={
+            j_ambray_pupa = {
                 name = 'Pupa',
                 text = {
                     '{C:mult}+#3#{} mult',
                     '{C:attention}Evolves{} after {C:attention}#1#{} rounds',
                     '{C:inactive}#2# remaining',
                     '{C:inactive}Evolves from Larva'
+                },
+                unlock = {
+                    'Grow me'
                 }
             },
-            j_blah_imago={
+            j_ambray_imago = {
                 name = 'Imago',
                 text = {
                     '{X:mult,C:white}X#1#{} mult',
                     '{C:inactive}Evolves from Pupa'
+                },
+                unlock = {
+                    'Growwww meeeee'
                 }
             },
-            j_blah_poi={
+            j_ambray_poi = {
                 name = 'P.O.I',
                 text = {
                     'At start of round adds a',
                     '{C:attention}White Seal{} to {C:attention}1{} random card in deck'
                 }
             },
-            j_blah_forest={
+            j_ambray_forest = {
                 name = 'Cuddle in the Woods',
                 text = {
                     {
                         'Before {C:attention}Gaia{} and {C:attention}Ambray{}',
                         'are scored, they gain an additional',
-                        '{C:attention}#1#{} permanent retrigger',
+                        '{C:attention}+#1#{} permanent retrigger',
                         'then they are debuffed this round',
                     }
                 }
             },
-            j_blah_forest_alt={
+            j_ambray_forest_alt = {
                 name = 'Cuddle in the Woods',
                 text = {
                     {
                         'Before {C:attention}Gaia{} and {C:attention}Ambray{}',
                         'are scored, they gain an additional',
-                        '{C:attention}#1#{} permanent retrigger',
+                        '{C:attention}+#1#{} permanent retrigger',
                         'then they are debuffed this round',
                     },
                     {
@@ -99,7 +105,7 @@ return {
                     }
                 }
             },
-            j_blah_washed = {
+            j_ambray_washed = {
                 name = 'Out for a Shower',
                 text = {
                     {
@@ -110,14 +116,14 @@ return {
                     }
                 }
             },
-            j_blah_missing = {
+            j_ambray_missing = {
                 name = 'Went Missing',
                 text = {
                     'Played cards gain {C:white,X:mult}X#1#{} mult',
                     '{C:green}#2# in #3#{} chance to be destroyed'
                 }
             },
-            j_blah_begun = {
+            j_ambray_begun = {
                 name = 'Only Just Begun',
                 text = {
                     {
@@ -127,15 +133,15 @@ return {
                     }
                 }
             },
-            j_blah_absurd = {
+            j_ambray_absurd = {
                 name = 'Absurd Joker',
                 text = {
                     'At the start of every round',
                     'add {C:attention}1{} random',
-                    'card to your hand'
+                    '{C:white,B:1}silly{} card to your hand'
                 }
             },
-            j_blah_io = {
+            j_ambray_io = {
                 name = 'IO',
                 text = {
                     'For every {C:money}$#1#{} spent',
@@ -143,7 +149,7 @@ return {
                     '{C:money}$#2#{C:inactive} remaining'
                 }
             },
-            j_blah_love = {
+            j_ambray_love = {
                 name = 'True Love\'s First Kiss',
                 text = {
                     'Gains {C:white,X:dark_edition}^#1#{} mult when',
@@ -151,7 +157,7 @@ return {
                     '{C:inactive}Currently {C:white,X:dark_edition}^#2#{C:inactive} mult'
                 }
             },
-            j_blah_love_alt = {
+            j_ambray_love_alt = {
                 name = 'True Love\'s First Kiss',
                 text = {
                     {
@@ -164,7 +170,7 @@ return {
                     }
                 }
             },
-            j_blah_unique = {
+            j_ambray_unique = {
                 name = 'Unique Joker',
                 text = {
                     'Gains {C:chips}+#4#{} for each unique{C:attention} consumable{} bought this run',
@@ -173,7 +179,7 @@ return {
                     '{C:inactive}Currently {C:chips}+#1#{C:inactive} chips, {C:mult}+#2#{C:inactive} mult, and {C:white,X:mult}X#3#{C:inactive} mult'
                 }
             },
-            j_blah_whatever = {
+            j_ambray_whatever = {
                 name = 'Whatever It Takes',
                 text = {
                     'Go up to {C:red}-$#2#{} in debt',
@@ -182,14 +188,14 @@ return {
                     '{C:inactive}currently {C:attention}+#3#{C:inactive} hand size'
                 }
             },
-            j_blah_sillyy = {
-                name = '{f:blah_wee}(⸝⸝>ᴗ<⸝⸝){} Joker',
+            j_ambray_sillyy = {
+                name = '{f:ambray_wee}(⸝⸝>ᴗ<⸝⸝){} Joker',
                 text = {
                     '{C:green}#1# in #2#{} chance to',
                     'randomly enhance played cards'
                 }
             },
-            j_blah_artistic = {
+            j_ambray_artistic = {
                 name = 'Artistic Joker',
                 text = {
                     '{C:green}#1# in #2#{} chance to',
@@ -197,7 +203,110 @@ return {
                     'card in deck'
                 }
             },
-            j_blah_transness = {
+            j_ambray_caw = {
+                name = {
+                    'caw (like a crow)',
+                    '{s:0.8}(i assume)',
+                },
+                text = {
+                    'blueprint',
+                    '{C:inactive,s:0.6}i thought itd be funny bc shes like',
+                    '{C:inactive,s:0.6}going into the one to the right',
+                    '{C:inactive,s:0.6}and thats what the joker does ykyk'
+                }
+            },
+            j_ambray_idk = {
+                name = '5 finger discount',
+                text = {
+                    'you can steal'
+                }
+            },
+            j_ambray_uno = {
+                name = 'Uno',
+                text = {
+                    '{C:dark_edition}Negative{} cards now have a',
+                    '{C:green}#1# in #2#{} chance to spawn in shop'
+                }
+            },
+            j_ambray_flamee = {
+                name = 'Flamee',
+                text = {
+                    ''
+                }
+            },
+            j_ambray_mia = {
+                name = 'Mia',
+                text = {
+                    {
+                        'gets {C:attention}pregnant{} after #1# rounds',
+                        '{C:inactive}#2# remaining'
+                    },
+                    {
+                        '{C:green}#3# in #4#{} chance to',
+                        'duplicate this joker on birth'
+                    }
+                }
+            },
+            j_ambray_miasBaby = {
+                name = 'the beauty of mpreg <3',
+                text = {
+                    'daddy gives {C:chips}+#1#{} chips',
+                    'for each of us'
+                }
+            },
+            j_ambray_pomp = {
+                name = 'bowl',
+                text = {
+                    'i am arrogant'
+                }
+            },
+            j_ambray_ralsei = {
+                name = 'Ralsei',
+                text = {
+                    'just stands there {V:1,B:2}cutely',
+                    '{C:inactive,s:0.8}no fr they do nothing'
+                }
+            },
+            j_ambray_pyke = {
+                name = 'JoPyKer',
+                text = {
+                    'Sends the {C:attention}lefmost',
+                    'played card back to your',
+                    'hand {C:attention}after play'
+                }
+            },
+            j_ambray_fih = {
+                name = 'condom fish',
+                text = {
+                    'gives {C:mult}mult{} equal to',
+                    'how high you can count',
+                    'within {C:attention}#1#{} seconds'
+                }
+            },
+            j_ambray_autumn = {
+                name = 'Pink Security Autumn',
+                text = {
+                    'goes on a run after',
+                    'every hand played'
+                }
+            },
+            j_ambray_meow = {
+                name = 'Meow',
+                text = {
+                    'Gives between {C:white,X:chips}X#1#{} chips',
+                    'and {C:white,X:chips}X#2#{} chips',
+                    'every hand played',
+                    '{C:inactive}will be {C:white,X:chips}X#3#{C:inactive} chips'
+                }
+            },
+            j_ambray_ashley = {
+                name = 'Ashley',
+                text = {
+                    'will finish when she',
+                    'wakes up :thubs:'
+                }
+            },
+            j_ambray_transness = {
                 name = 'The Trans Experience',
                 text = {
                     {
@@ -224,7 +333,7 @@ return {
                     }
                 }
             },
-            j_blah_transness1 = {
+            j_ambray_transness1 = {
                 name = 'The Trans Experience',
                 text = {
                     {
@@ -240,10 +349,13 @@ return {
                         'randomly selected cards in your deck',
                         'this rounds cards are',
                         '{V:1}#1# of #2#{} and {V:2}#3# of #4#'
+                    },
+                    {
+                        'You will {V:3}#5#{} this round'
                     }
                 }
             },
-            j_blah_transness2 = {
+            j_ambray_transness2 = {
                 name = 'The Trans Experience',
                 text = {
                     {
@@ -258,10 +370,13 @@ return {
                         'You must trigger a minimum of {C:attention}#2#',
                         'cards this round',
                         '{C:inactive}current amount is {C:attention}#1#'
+                    },
+                    {
+                        'You will {V:1}#3#{} this round'
                     }
                 }
             },
-            j_blah_transness3 = {
+            j_ambray_transness3 = {
                 name = 'The Trans Experience',
                 text = {
                     {
@@ -275,36 +390,63 @@ return {
                         'Current ability:',
                         'You have a total of {C:attention}#1#{}',
                         'seconds in this blind'
+                    },
+                    {
+                        'You will {V:1}#5#{} this round'
                     }
                 }
-            }
+            },
         },
         Back = {
-            b_blah_chud = {
+            b_ambray_chud = {
                 name = 'Fuck My Stupid Chud Deck',
                 text = {
                     'Start with {C:attention}#1#{} and {C:attention} #2#{}',
-                    'blah additions appear {C:attention}5x{} as often'
+                    'ambray additions appear {C:attention}5x{} as often'
                 }
+            },
+            b_ambray_yuri = {
+                name = 'Yuri Deck',
+                text = {
+                    'Start with 10 {C:green}random{}',
+                    '{C:gaia_dokis}Dokis{} in your deck',
+                    'adds 1 {C:attention}Gaia{} card',
+                    'and 1 {C:attention}Ambray{} card',
+                    'ambray and {C:gaia_dokis}DDGGPM{} additions',
+                    'appear more often'
+                },
+                unlock = {
+                    'Win a run with the',
+                    '{C:purple}??? Deck{} on {C:attention}any stake',
+                },
             }
         },
+        Blind = {
+            bl_final_acorn = {
+                name = "Amber!! o:",
+                text = {
+                    "Flips and shuffles",
+                    "all Joker cards",
+                },
+            },
+        },
         Tarot = {
-            c_blah_PoW = {
+            c_ambray_PoW = {
                 name = 'Page of Wands',
-                text ={
+                text = {
                     'Enhance {C:attention}#1#{} selected card',
                     'into a {C:attention}#2#{}',
                     'you lose {C:money}$#3#'
                 }
             },
-            c_blah_KoW = {
+            c_ambray_KoW = {
                 name = 'Knight of Wands',
                 text = {
                     'Enhance {C:attention}#1#{} selected card',
-                    'into something {C:white,X:blah_transGrad}silly'
+                    'into something {C:white,B:1}silly'
                 }
             },
-            c_blah_QoW = {
+            c_ambray_QoW = {
                 name = 'Queen of Wands',
                 text = {
                     'Enhance {C:attention}#1#{} selected card',
@@ -312,39 +454,59 @@ return {
                     'or a {C:attention}#3#{} card'
                 }
             },
-            c_blah_KioW = {
+            c_ambray_KioW = {
                 name = 'King of Wands',
                 text = {
-                    'Send #1# {C:green}random{} owned joker',
-                    'to your hand'
+                    'Swap the area',
+                    'of {C:attention}2{} selected cards',
+                    '{C:inactive}excluding this one'
                 }
-            }
+            },
+            c_ambray_chokun = {
+                name = 'Chokun Gaming',
+                text = {
+                    'If used',
+                    '{C:attention}Prevents Death{}',
+                    'and gives {C:money}$#1#'
+                }
+            },
+            c_wheel_of_fortune = {
+                name = 'Wheel of Fortune',
+                text = {
+                    "{C:green}#1# in #2#{} chance to add",
+                    "{C:dark_edition}Foil{}, {C:dark_edition}Holographic{}, or",
+                    "{C:dark_edition}Polychrome{} edition",
+                    "to a random {C:attention}Joker",
+                    'else, add {C:dark_edition}aberrance{}',
+                    'to one random {C:attention}Joker'
+                },
+            },
         },
-        blah_quest = {
-            c_blah_yuri = {
+        ambray_quest = {
+            c_ambray_yuri = {
                 name = 'Yuri',
                 text = {
                     {
-                        'When this {C:blah_quest}Quest{} is obtained',
+                        'When this {C:ambray_quest}Quest{} is obtained',
                         'enhances 1 card in deck to a',
                         '{C:attention}Gaia{} card, and 1 to an {C:attention}Ambray{} card',
                     },
                     {
-                        'This {C:blah_quest}Quest{} is complete when',
+                        'This {C:ambray_quest}Quest{} is complete when',
                         '{C:attention}Gaia{} and {C:attention}Ambray{} trigger together'
                     }
                 }
             },
-            c_blah_yuri_alt = {
+            c_ambray_yuri_alt = {
                 name = 'Yuri',
                 text = {
                     {
-                        'When this {C:blah_quest}Quest{} is obtained',
+                        'When this {C:ambray_quest}Quest{} is obtained',
                         'enhances 1 card in deck to a',
                         '{C:attention}Gaia{} card, and 1 to an {C:attention}Ambray{} card',
                     },
                     {
-                        'This {C:blah_quest}Quest{} is complete when',
+                        'This {C:ambray_quest}Quest{} is complete when',
                         '{C:attention}Gaia{} and {C:attention}Ambray{} trigger together'
                     },
                     {
@@ -353,41 +515,43 @@ return {
                     }
                 }
             },
-            c_blah_ubi = {
+            c_ambray_ubi = {
                 name = 'Universal Basic Income',
                 text = {
                     {
-                        'This {C:blah_quest}Quest{} is completed when',
+                        'This {C:ambray_quest}Quest{} is completed when',
                         'you have {C:money}$#1#{} or less'
                     },
                     {
-                        'This {C:blah_quest}Quest{} gives an extra',
+                        'This {C:ambray_quest}Quest{} gives an extra',
                         '{C:money}$#2#{} when it is complete'
                     }
                 }
             },
-            c_blah_minimal = {
+            c_ambray_minimal = {
                 name = 'Minimalism',
                 text = {
                     {
-                        'When this {C:blah_quest}Quest{} is obtained',
+                        'When this {C:ambray_quest}Quest{} is obtained',
                         'it creates {C:attention}#2#{}',
+                        '{C:inactive}must have room'
                     },
                     {
-                        'This {C:blah_quest}Quest{} is complete when',
+                        'This {C:ambray_quest}Quest{} is complete when',
                         'you have less than {C:attention}#1#{} cards in deck'
                     }
                 }
             },
-            c_blah_minimal_alt = {
+            c_ambray_minimal_alt = {
                 name = 'Minimalism',
                 text = {
                     {
-                        'When this {C:blah_quest}Quest{} is obtained',
+                        'When this {C:ambray_quest}Quest{} is obtained',
                         'it creates {C:attention}#2#{}',
+                        '{C:inactive}must have room'
                     },
                     {
-                        'This {C:blah_quest}Quest{} is complete when',
+                        'This {C:ambray_quest}Quest{} is complete when',
                         'you have less than {C:attention}#1#{} cards in deck'
                     },
                     {
@@ -396,33 +560,37 @@ return {
                     }
                 }
             },
-            c_blah_study = {
+            c_ambray_study = {
                 name = 'Study',
                 text = {
                     {
-                        'When this {C:blah_quest}Quest{} is obtained',
+                        'When this {C:ambray_quest}Quest{} is obtained',
                         'it creates {C:attention}#1#{}',
+                        '{C:inactive}must have room'
                     },
                     {
-                        'This {C:blah_quest}Quest{} is complete when',
-                        'you play a {C:attention}Flush Five'
+                        'This {C:ambray_quest}Quest{} is complete when',
+                        'you have played a {C:attention}Flush House'
                     }
+                },
+                unlock = {
+                    'Discover all {C:inactive}vanilla{} hands'
                 }
             },
-            c_blah_trans = {
-                name = 'The Transgender Agenda',
+            c_ambray_trans = {
+                name = 'The Trans Agenda',
                 text = {
                     {
-                        'This {C:blah_quest}Quest{} is complete when',
+                        'This {C:ambray_quest}Quest{} is complete when',
                         'A{C:attention} Jack{} or {C:attention}Queen{} increases its rank'
                     }
                 }
             },
-            c_blah_trans_alt = {
-                name = 'The Transgender Agenda',
+            c_ambray_trans_alt = {
+                name = 'The Trans Agenda',
                 text = {
                     {
-                        'This {C:blah_quest}Quest{} is complete when',
+                        'This {C:ambray_quest}Quest{} is complete when',
                         'A{C:attention} Jack{} or {C:attention}Queen{} increases its rank'
                     },
                     {
@@ -430,51 +598,62 @@ return {
                     }
                 }
             },
-            c_blah_gambling = {
+            c_ambray_gambling = {
                 name = 'Lets Go Gambling!!!!',
                 text = {
-                    'This {C:blah_quest}Quest{} is complete when',
+                    'This {C:ambray_quest}Quest{} is complete when',
                     'A{C:attention} #1#{} hits'
+                }
+            },
+            c_ambray_doki = {
+                name = 'Doki Hunter',
+                text = {
+                    'This {C:ambray_quest}Quest{} is complete when',
+                    'you play a flush of {C:gaia_dokis}Dokis{}'
+                },
+                unlock = {
+                    "Have at least {E:1,C:attention}20",
+                    "cards with {E:1,C:gaia_dokis}Dokis",
+                    "suit in your deck",
+                },
+            },
+            c_ambray_absurdism = {
+                name = 'Absurdism',
+                text = {
+                    'This {C:ambray_quest}Quest{} is complete when',
+                    'you use {C:attention}#1#{} on a Joker'
+                },
+                unlock = {
+                    'Have a {C:attention}Joker{} card',
+                    'in your deck at',
+                    'end of round'
                 }
             }
         },
-        blah_tooltips = {
-            c_blah_quests = {
+        ambray_tooltips = {
+            c_ambray_quests = {
                 name = 'Quest',
                 text = {
-                    'When a {C:blah_quest}Quest{} is complete',
+                    'When a {C:ambray_quest}Quest{} is complete',
                     'it is {C:red}destroyed{} and you get {C:money}$15',
-                    '{C:blah_quest}Quests{} cannot be {C:money}sold'
+                    '{C:ambray_quest}Quests{} cannot be {C:money}sold'
                 }
             },
-            c_blah_gaiaTip = {
+            c_ambray_gaiaTip = {
                 name = 'Gaia',
                 text = {
                     'If played with an {C:attention}Ambray{}',
-                    'card, some {C:white,X:blah_waowgradient}gay stuff{} happens'
+                    'card, some {C:white,X:1}gay stuff{} happens'
                 }
             },
-            c_blah_ambrayTip = {
+            c_ambray_ambrayTip = {
                 name = 'Ambray',
                 text = {
                     'If played with a {C:attention}Gaia{}',
-                    'card, some {C:white,X:blah_waowgradient}gay stuff{} happens'
+                    'card, some {C:white,X:1}gay stuff{} happens'
                 }
             },
-            c_blah_whiteSealTip = {
-                name = 'holy shit',
-                text = {
-                    'i did it chat it took so long but i did it'
-                }
-            },
-            c_blah_ubiTip = {
-                name = 'kinda messy sorry',
-                text = {
-                    'you might have to wait a bit longer',
-                    'than expected for this to complete'
-                }
-            },
-            c_blah_lostTip = {
+            c_ambray_lostTip = {
                 name = 'Lost Card',
                 text = {
                     'When you try to {C:attention}copy',
@@ -484,23 +663,14 @@ return {
                 }
 
             },
-            c_blah_lostTip2 = {
-                name = 'might be messed up srory',
+            c_ambray_lostTip2 = {
+                name = 'trigger warning !!',
                 text = {
-                    'the way balatro destroys',
-                    'cards is really convoluted',
-                    'so this might not work',
-                    'as eexpected'
+                    'the cards try to kill themselves',
+                    'i haven no clue why :('
                 }
             },
-            c_blah_uniqueTip = {
-                name = 'bwoken :(',
-                text = {
-                    'only works with vanilla and a',
-                    'couple other consumable types'
-                }
-            },
-            c_blah_whateverTip = {
+            c_ambray_whateverTip = {
                 name = 'almost killed me irl !!',
                 text = {
                     'nah not really',
@@ -509,65 +679,122 @@ return {
                     'another instance of me being lazy :('
                 }
             },
-            c_blah_spectrallibTip = {
-                name = 'better with spectrallib',
+            c_ambray_distractionTip = {
+                name = 'Distraction',
                 text = {
-                    'recommend turning on spectrallib',
-                    'it lets you actually select the things',
-                    'instead of just looking at them'
+                    'grab it while',
+                    'theyre not looking'
+                }
+            },
+            c_ambray_marriageTip = {
+                name = '',
+                text = {
+                    'just like how you',
+                    'stole my heart <3'
+                }
+            },
+            c_ambray_cryptidTip = {
+                name = 'misprint theft !!',
+                text = {
+                    'cryptid has the same',
+                    'edition, i just wanted',
+                    'to use the shader i',
+                    'made and so i took',
+                    'their idea, sowwy'
+                }
+            },
+            c_ambray_fihTip = {
+                name = 'bruhken',
+                text = {
+                    'this is broken',
+                    'idk why or how',
+                    'to fixi t'
+                }
+            },
+        },
+        panel = {
+            c_ambray_daydream = {
+                name = 'Daydream Panel',
+                text = {
+                    'Add {C:dark_edition}#1#{} to #2#',
+                    'selected cards',
+                    '{C:inactive}excluding this one'
+                },
+            }
+        },
+        Edition = {
+            e_ambray_distraction = {
+                name = 'Distraction',
+                text = {
+                    'grab it while',
+                    'theyre not looking'
+                }
+            },
+            e_ambray_aberrance = {
+                name = 'Aberrance',
+                text = {
+                    'Becomes a {C:green,E:1}Random{}',
+                    'card of the same type'
+                }
+            },
+            e_ambray_misprint = {
+                name = 'Misprint',
+                text = {
+                    '{C:dark_edition}Randomizes{} values',
+                    'between {C:attention}#1#{} and {C:attention}#2#'
                 }
             }
         },
         Enhanced = {
-            m_blah_gaia = {
+            m_ambray_gaia = {
                 name = 'Gaia <3',
                 text = {
                     {
                         'If played with an {C:attention}Ambray{}',
-                        'card, some {C:white,X:blah_waowgradient}gay stuff{} happens'
+                        'card, some {C:white,B:1}gay stuff{} happens'
                     }
                 }
             },
-            m_blah_gaia_alt = {
+            m_ambray_gaia_alt = {
                 name = 'Gaia <3',
                 text = {
                     {
                         'If played with an {C:attention}Ambray{}',
-                        'card, some {C:white,X:blah_waowgradient}gay stuff{} happens'
+                        'card, some {C:white,B:1}gay stuff{} happens'
                     },
                     {
                         '{C:inactive,s:0.8}what a beautiful creature'
                     }
                 }
             },
-            m_blah_ambray = {
+            m_ambray_ambray = {
                 name = 'Ambray',
                 text = {
                     {
                         'If played with a {C:attention}Gaia{}',
-                        'card, some {C:white,X:blah_waowgradient}gay stuff{} happens'
+                        'card, some {C:white,B:1}gay stuff{} happens'
                     }
                 }
             },
-            m_blah_ambray_alt = {
+            m_ambray_ambray_alt = {
                 name = 'Ambray',
                 text = {
                     {
                         'If played with a {C:attention}Gaia{}',
-                        'card, some {C:white,X:blah_waowgradient}gay stuff{} happens'
+                        'card, some {C:white,B:1}gay stuff{} happens'
                     },
                     {
                         '{C:inactive,s:0.8}oh how infatuated she is'
                     }
                 }
             },
-            m_blah_tree = {
+            m_ambray_tree = {
                 name = '',
                 text = {
                     'there is a tree here'
                 }
             },
-            m_blah_tree_alt = {
+            m_ambray_tree_alt = {
                 name = '',
                 text = {
                     'there is a tree here',
@@ -575,7 +802,7 @@ return {
                     'to multiplayer being active'
                 }
             },
-            m_blah_lost={
+            m_ambray_lost = {
                 name = 'Lost Card',
                 text = {
                     'When you try to {C:attention}copy',
@@ -587,36 +814,36 @@ return {
             }
         },
         Other = {
-            blah_white_seal = {
+            ambray_white_seal = {
                 name = 'White Seal',
                 text = {
-                    'Gives {C:white,X:mult}X#1#{} on score',
+                    'Gives {C:white,X:mult}X#1#{} mult on score',
                     'gets {C:attention}removed{} on play or discard',
                     '{C:red}destroys{} itself at end of round'
                 }
             },
-            p_blah_smallQuestPack = {
+            p_ambray_smallQuestPack = {
                 name = 'Baby Quest pack',
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:blah_quest} Quest{} cards"
+                    "{C:attention}#2#{C:ambray_quest} Quest{} cards"
                 }
             },
-            p_blah_mediumQuestPack = {
+            p_ambray_mediumQuestPack = {
                 name = 'Medium Quest pack',
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:blah_quest} Quest{} cards"
+                    "{C:attention}#2#{C:ambray_quest} Quest{} cards"
                 }
             },
-            p_blah_bigQuestPack = {
+            p_ambray_bigQuestPack = {
                 name = 'Gigantic Quest pack',
                 text = {
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2#{C:blah_quest} Quest{} cards"
+                    "{C:attention}#2#{C:ambray_quest} Quest{} cards"
                 }
             },
-            blah_transTip = {
+            ambray_transTip = {
                 name = 'formula for the retrigger count',
                 text = {
                     'the way its calculated is a constant (3)',
@@ -625,31 +852,40 @@ return {
                     'so 3x#1#+8=#2#'
                 }
             },
-            blah_transTip2 = {
-                name = 'too lazy to fix rn',
+            ambray_transTip2 = {
+                name = 'multiplayer',
                 text = {
-                    'this was really really hard to make',
-                    'and im lazy so i gave up',
-                    'if you want you can uncomment',
-                    'the in_pool thing and see'
+                    'broken in mutliplayer',
+                    'so i made it not able to spawn',
+                    'sowwy'
                 }
-            }
+            },
+            undiscovered_ambray_quest = {
+                name = 'do they know?',
+                text = {
+                    'they dont know',
+                    ':pensive:'
+                }
+            },
         }
     },
     misc = {
         dictionary = {
-            b_blah_quest_cards = 'Quest Cards',
-            b_blah_tooltips_cards = 'tooltips cards',
-            k_blah_quest = 'Quest',
-            k_blah_tooltips = 'tooltips',
-            k_blah_questPack = '{C:blah_quest}Quest{} Pack',
-            k_blah_waow = ':waow:'
+            b_ambray_quest_cards = 'Quest Cards',
+            b_ambray_tooltips_cards = 'tooltips cards',
+            k_ambray_quest = 'Quest',
+            k_ambray_tooltips = 'tooltips',
+            k_ambray_questPack = '{C:ambray_quest}Quest{} Pack',
+            k_ambray_waow = ':waow:',
         },
         labels = {
-            blah_white_seal = 'White Seal',
-            blah_quest = 'Quest',
-            blah_tooltips = 'Tooltips',
-            k_blah_waow = ':waow:'
-        }
+            ambray_white_seal = 'White Seal',
+            ambray_quest = 'Quest',
+            ambray_tooltips = 'Tooltips',
+            k_ambray_waow = ':waow:',
+            ambray_distraction = 'Distraction',
+            ambray_aberrance = 'Aberrance',
+            ambray_misprint = 'Misprint',
+        },
     }
 }

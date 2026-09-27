@@ -1,0 +1,48 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 50
+
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Spectrallib "Entropy/suit_levels.lua"]'
+pattern = '''local function generate_suit_bonus_tbl(card, suit_key)'''
+position = 'after'
+payload = '''
+    if suit_key == 'ambray_burger' then return end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Spectrallib "Entropy/suit_levels.lua"]'
+pattern = '''local function generate_rank_bonus_tbl(card, rank_key)'''
+position = 'after'
+payload = '''
+    if rank_key == 'ambray_nothing' then return end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Spectrallib "Entropy/card_buttons.lua"]'
+pattern = '''if (card.area == G.hand and G.hand) then --Add a use button'''
+position = 'after'
+payload = '''
+--[[ commenting this out bc there are enough ways to move cards around in this mod (ambrays gay lab) that i think its ok to not have them
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Spectrallib "Entropy/card_buttons.lua"]'
+pattern = '''if card.config.center.set == "Booster" then'''
+position = 'before'
+payload = '''
+]]
+'''
+match_indent = true

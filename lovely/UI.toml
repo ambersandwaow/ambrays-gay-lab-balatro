@@ -1,0 +1,45 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 50
+
+
+#thanks to foo54 on discord for this, solved a ton of my problems
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+   end'''
+position = 'at'
+payload = '''
+localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+    elseif _c.set == "ambray_tooltips" then
+        localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+    end
+'''
+match_indent = false
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''localize{type = 'other', key = 'undiscovered_'..(string.lower(_c.set)), set = _c.set, nodes = desc_nodes}'''
+position = 'at'
+payload = '''
+if not Ambray.shouldActuallyHideDesc(card) then
+    localize{type = 'other', key = 'undiscovered_'..(string.lower(_c.set)), set = _c.set, nodes = desc_nodes}
+end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''not show_win_cta and UIBox_button({button = 'go_to_menu', label = {localize('b_main_menu')}, minw = 2.5, maxw = 2.5, minh = 1, focus_args = {nav = 'wide'}}) or nil,'''
+position = 'at'
+payload = '''
+not Ambray.canGay and not show_win_cta and UIBox_button({button = 'go_to_menu', label = {localize('b_main_menu')}, minw = 2.5, maxw = 2.5, minh = 1, focus_args = {nav = 'wide'}}) or nil,
+Ambray.canGay and not show_win_cta and UIBox_button({button = 'ambrayGayLink', label = {'Gay Button'}, minw = 2.5, maxw = 2.5, minh = 1, focus_args = {nav = 'wide'}}) or nil,
+'''
+match_indent = true

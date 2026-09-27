@@ -13,3 +13,14 @@ payload = '''
 SMODS.calculate_context({wheel_used = true, edition = edition})
 '''
 match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''copy_card(rightmost, G.hand.highlighted[i])'''
+position = 'after'
+payload = '''
+SMODS.calculate_context({death_used = true, card = rightmost})
+'''
+match_indent = true

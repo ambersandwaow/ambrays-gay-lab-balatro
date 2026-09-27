@@ -1,0 +1,35 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 50
+
+
+[[patches]]
+[patches.pattern]
+target = 'main.lua'
+pattern = '''G.FPS_CAP = G.FPS_CAP or 500'''
+position = 'at'
+payload = '''
+if Ambray and Ambray.fpsOverride and type(Ambray.fpsOverride) == 'number' then
+    G.FPS_CAP = Ambray.fpsOverride
+else
+    G.FPS_CAP = G.FPS_CAP or 500
+end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''new_card:set_ability(other.config.center)'''
+position = 'at'
+payload = '''
+    if not SMODS.has_enhancement(other,'m_ambray_lost') then
+        new_card:set_ability(other.config.center)
+    else
+        SMODS.calculate_context({ambray_lostTrigger = true,card=other})
+        SMODS.destroy_cards(new_card)
+    end
+'''
+match_indent = true

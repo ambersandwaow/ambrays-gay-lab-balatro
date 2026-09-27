@@ -1,0 +1,89 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 50
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''elseif e.config.id ~= 'buy_and_use' then'''
+position = 'before'
+payload = '''
+elseif c1.ability.set == 'ambray_quest' then
+    G.quests:emplace(c1)
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'back.lua'
+pattern = '''G.consumeables:emplace(card)'''
+position = 'at'
+payload = '''
+if card.ability.set == 'ambray_quest' then
+    G.quests:emplace(card)
+else
+    G.consumeables:emplace(card)
+end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''elseif card.area and card.area == G.pack_cards then'''
+position = 'before'
+payload = '''
+    if card.ability and card.ability.set == 'ambray_quest' then
+        if card.area and card.area == G.shop_jokers then
+            return{
+                n = G.UIT.ROOT,config = {padding = 0}
+            }
+        else
+            return{
+                n = G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes = {
+                    {n=G.UIT.C, config={align = "bm"}, nodes={
+                        {n=G.UIT.C, config={ref_table = card, align = "bm",maxw = 1.4, padding = 0.1, r=0.08, minw = 1.2, minh = 0.6, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_use_consumeable'}, nodes={
+                            {n=G.UIT.T, config={text = localize('b_use'),colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
+                        }}
+                    }}
+                }
+            }
+        end
+    end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.highlighted and self.area and self.area.config.type ~= 'shop' then'''
+position = 'at'
+payload = '''
+if self.highlighted and self.ability.set == 'ambray_quest' then
+    local x_off = (self.ability.consumeable and -0.1 or 0)
+    self.children.use_button = UIBox{
+        definition = G.UIDEF.use_and_sell_buttons(self),
+        config = {
+            align= "bm",
+            offset = {x = 0.05, y = -0.15},
+            parent = self} }
+elseif self.highlighted and self.area and self.area.config.type ~= 'shop' then
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''if card.ability.consumeable then --and card:can_use_consumeable(true, true)'''
+position = 'at'
+payload = '''
+if card.ability.consumeable and card.ability.set ~= 'ambray_quest' then
+--if card.ability.consumeable then --and card:can_use_consumeable(true, true)
+'''
+match_indent = true
