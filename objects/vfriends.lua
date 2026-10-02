@@ -7,18 +7,17 @@ SMODS.Consumable{--Chokun
     loc_vars = function(self, info_queue, card)
         return{vars = {card.ability.extra.dollars}}
     end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_she_her'), SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
+    end,
     use = function(self, card, area, copier)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                Ambray.saved = {true, 'ily Chokun'}
-                ease_dollars(card.ability.extra.dollars)
-                return true
-            end
-        }))
+        Ambray.simpleEvent(function()
+            play_sound('tarot1')
+            card:juice_up(0.3, 0.5)
+            Ambray.saved = {true, 'ily Chokun'}
+            ease_dollars(card.ability.extra.dollars)
+            return true
+        end, 0.4)
     end,
     can_use = function() return G.GAME.blind.in_blind end,
 }
@@ -36,7 +35,7 @@ SMODS.Joker{--Uno
         denom = 30
     }},
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('he/him', SMODS.Gradients['ambray_normalGrad'], SMODS.Gradients['ambray_normalGradOff'], 1)
+        badges[#badges+1] = create_badge(localize('k_he_him'), SMODS.Gradients['ambray_normalGrad'], SMODS.Gradients['ambray_normalGradOff'], 1)
     end,
     loc_vars = function (self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, card.ability.extra.num, card.ability.extra.denom)
@@ -58,29 +57,28 @@ SMODS.Joker{--Mia
     cost = 3,
     rarity = 1,
     unlocked = true,
-    blueprint_compat = false,
-    config = {extra = {rounds = 2, current = 2, num = 1, denom = 6}},
+    config = {extra = {rounds = 2, current = 0, num = 1, denom = 6}},
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, card.ability.extra.num, card.ability.extra.denom)
         return{vars = {card.ability.extra.rounds, card.ability.extra.current, numerator, denominator}}
     end,
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('he/him', SMODS.Gradients['ambray_normalGrad'], SMODS.Gradients['ambray_normalGradOff'], 1)
+        badges[#badges+1] = create_badge(localize('k_he_him'), SMODS.Gradients['ambray_normalGrad'], SMODS.Gradients['ambray_normalGradOff'], 1)
     end,
     calculate = function(self, card, context)
-        if card.highlighted and card.ability.extra.current <= 0 then
-            card.ability.extra.current = card.ability.extra.rounds
+        if card.highlighted and card.ability.extra.current >= card.ability.extra.rounds and not context.blueprint then
+            card.ability.extra.current = 0
             Ambray.simpleEvent(function()
                 local cutie = SMODS.add_card{key = 'j_ambray_miasBaby'}
                 cutie.area:remove_card(cutie)
-                if SMODS.pseudorandom_probability(card, 'boypreggers :flushed:',card.ability.extra.num, card.ability.extra.denom) then
+                if SMODS.pseudorandom_probability(card, 'boypreggers :flushed:', card.ability.extra.num, card.ability.extra.denom) then
                     SMODS.add_card{key = 'j_ambray_mia', no_edition = true}
                 end
                 return true
             end)
         end
         if context.end_of_round and context.main_eval then
-            card.ability.extra.current = card.ability.extra.current - 1
+            card.ability.extra.current = card.ability.extra.current + 1
         end
         if context.joker_main then
             return{chips = Ambray.miaChips or 0}
@@ -95,6 +93,8 @@ SMODS.Joker{--mpreg
     cost = 1,
     rarity = 1,
     no_collection = true,
+    ambray_drag_override = true,
+    ambray_drag_nowhere = true,
     config = {chips = 1},
     in_pool = function(self, args)
         return false
@@ -104,11 +104,11 @@ SMODS.Joker{--mpreg
     end,
     add_to_deck = function(self, card, from_debuff)
         Ambray.miaBabies = Ambray.miaBabies or {}
-        card:ambrayAdd(Ambray.miaBabies)
+        Ambray.miaBabies[#Ambray.miaBabies+1] = card
         Ambray.miaChips = (Ambray.miaChips or 0) + card.ability.chips
     end,
     remove_from_deck = function(self, card, from_debuff)
-        Ambray.removeFromTable(Ambray.miaBabies,card)
+        Ambray.removeFromTable(Ambray.miaBabies, card)
         Ambray.miaChips = (Ambray.miaChips or card.ability.chips) - card.ability.chips
     end,
     calculate = function(self, card, context)
@@ -126,9 +126,15 @@ SMODS.Joker{--Pomp
     rarity = 1,
     discovered = false,
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('any', SMODS.Gradients['ambray_nbGrad'], SMODS.Gradients['ambray_nbGradInv'], 1)
+        badges[#badges+1] = create_badge(localize('k_any_pronouns'), SMODS.Gradients['ambray_nbGrad'], SMODS.Gradients['ambray_nbGradInv'], 1)
     end,
     add_to_deck = function(self, from_debuff)
+        Ambray.simpleEvent(function()
+            Ambray.bully(500,300,false)
+            return true
+        end)
+    end,
+    load = function(self)
         Ambray.simpleEvent(function()
             Ambray.bully(500,300,false)
             return true
@@ -153,7 +159,7 @@ config = {extra = {killme = false}},
         return true
     end,
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('she/her', SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
+        badges[#badges+1] = create_badge(localize('k_she_her'), SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
     end,
     loc_vars = function(self, info_queue, card) --blindly stolen from vanillaremade :fire:
         if card.area and card.area.cards and not G.SETTINGS.paused then
@@ -178,6 +184,28 @@ config = {extra = {killme = false}},
     end,
     add_to_deck = function(self, card, from_debuff)
         card.ability.extra.killme = false
+        G.E_MANAGER:add_event(Event{
+            blockable = false,
+            blocking = false,
+            no_delete = true,
+            trigger = "after",
+            delay = 1,
+            timer = "UPTIME",
+            func = function()
+                if card.area and card.area.cards and #card.area.cards > 1 then
+                    for i = 1, #card.area.cards do
+                        if card.area.cards[i] == card and i+1 ~= #card.area.cards then
+                            card.area.cards[i] = card.area.cards[#card.area.cards-1]
+                            card.area.cards[#card.area.cards-1] = card
+                        end
+                    end
+                end
+                Event.start_timer = false
+                if card.ability.extra.killme then return true end
+            end
+        })
+    end,
+    load = function(self, card)
         G.E_MANAGER:add_event(Event{
             blockable = false,
             blocking = false,
@@ -226,7 +254,7 @@ SMODS.Joker{--Flamee
     blueprint_compat = false,
     config = {extra = {minfps = 1, maxfps = 25, killme = false, counter = 0}},
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('he/him', SMODS.Gradients['ambray_normalGrad'], SMODS.Gradients['ambray_normalGradOff'], 1)
+        badges[#badges+1] = create_badge(localize('k_he_him'), SMODS.Gradients['ambray_normalGrad'], SMODS.Gradients['ambray_normalGradOff'], 1)
     end,
     loc_vars = function(self, info_queue, card)
         local r_fps = {}
@@ -248,6 +276,26 @@ SMODS.Joker{--Flamee
     end,
     add_to_deck = function(self, card, from_debuff)
         card.ability.extra.killme = false
+        Ambray.bully(math.random(150, 750), math.random(75, 300))
+        G.E_MANAGER:add_event(Event{
+            blockable = false,
+            blocking = false,
+            no_delete = true,
+            trigger = "after",
+            delay = 1,
+            timer = "UPTIME",
+            func = function()
+                local fps = math.random(card.ability.extra.minfps or 1, card.ability.extra.maxfps or 25)
+                Ambray.fpsOverride = fps
+                Event.start_timer = false
+                if card.ability.extra.killme then
+                    Ambray.fpsOverride = 500
+                    return true
+                end
+            end
+        })
+    end,
+    load = function(self, card)
         Ambray.bully(math.random(100,500), math.random(50,200))
         G.E_MANAGER:add_event(Event{
             blockable = false,
@@ -257,10 +305,11 @@ SMODS.Joker{--Flamee
             delay = 1,
             timer = "UPTIME",
             func = function()
-                local fps = math.random(card.ability.extra.minfps, card.ability.extra.maxfps)
+                local fps = math.random(card.ability.extra.minfps or 1, card.ability.extra.maxfps or 25)
                 Ambray.fpsOverride = fps
                 Event.start_timer = false
-                if card.ability.extra.killme then
+                if card.ability and card.ability.extra and card.ability.extra.killme then
+                    Ambray.fpsOverride = 500
                     return true
                 end
             end
@@ -268,7 +317,6 @@ SMODS.Joker{--Flamee
     end,
     remove_from_deck = function(self, card, from_debuff)
         card.ability.extra.killme = true
-        Ambray.fpsOverride = 500
         Ambray.bully(1000, 100, true)
     end
 }
@@ -280,7 +328,7 @@ SMODS.Joker{--JoPyKer
     rarity = 2,
     blueprint_compat = false,
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('any', SMODS.Gradients['ambray_nbGrad'], SMODS.Gradients['ambray_nbGradInv'], 1)
+        badges[#badges+1] = create_badge(localize('k_any_pronouns'), SMODS.Gradients['ambray_nbGrad'], SMODS.Gradients['ambray_nbGradInv'], 1)
     end,
     calculate = function(self, card, context)
         if context.after then
@@ -303,7 +351,7 @@ SMODS.Joker{--Pink Security Autumn
     blueprint_compat = false,
     shouldntDiscard = true,
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('she/her', SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
+        badges[#badges+1] = create_badge(localize('k_she_her'), SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
     end,
     add_to_deck = function(self, card, from_debuff)
         card:ambrayAdd(G.GAME.ambrayAutumnCards)
@@ -317,18 +365,20 @@ SMODS.Joker{--condom fish
     atlas = 'jokers',
     pos = {x = 9, y = 2},
     pixel_size = {h = 71, w = 71},
-    cost = 1,
+    cost = 5,
     rarity = 1,
-    config = {extra = {mult = 0, time = 2}},
+    config = {extra = {mult = 0, time = 2, multiplier = 2}},
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = {key = 'c_ambray_fihTip', set = 'ambray_tooltips'}
-        return{vars = {card.ability.extra.time}}
+        return{vars = {card.ability.extra.time, card.ability.extra.multiplier}}
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_he_him'), SMODS.Gradients['ambray_normalGrad'], SMODS.Gradients['ambray_normalGradOff'], 1)
     end,
     calculate = function(self, card, context)
         local current, ret
         current = current or 1
         ret = ret or 0
-        if context.before then
+        if context.press_play then
             current, card.ability.extra.mult = 1, 0
             local saver = G.TIMERS.REAL + card.ability.extra.time
             attention_text{
@@ -352,17 +402,7 @@ SMODS.Joker{--condom fish
             end)
         end
         if context.joker_main then
-            Ambray.simpleEvent(function()
-                attention_text{
-                    text = '+ '..tostring(card.ability.extra.mult)..' mult',
-                    scale = 0.75, hold = 1.4, major = card,
-                    backdrop_colour = G.C.MULT, align = 'bm', offset = {x = 0, y = 0},
-                }
-                mod_mult(card.ability.extra.mult + mult)
-                update_hand_text({delay = 0}, {mult = mult})
-                print(card.ability.extra.mult, mult)
-                return true
-            end)
+            return{mult = card.ability.extra.mult * card.ability.extra.multiplier}
         end
     end
 }
@@ -378,7 +418,7 @@ SMODS.Joker{--Meow
         return{vars = {card.ability.extra.min / 100, card.ability.extra.max / 100, card.ability.extra.xchips}}
     end,
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('she/her', SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
+        badges[#badges+1] = create_badge(localize('k_she_her'), SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
     end,
     calculate = function(self, card, context)
         if context.joker_main then
@@ -394,8 +434,97 @@ SMODS.Joker{--Ashley
     pos = {x = 1, y = 3},
     cost = 5,
     rarity = 2,
-    config = {extra = {killme = false}},
+    config = {extra = {killme = false, left = 0.5, right = 2}},
     set_badges = function(self, card, badges)
-        badges[#badges+1] = create_badge('she/her', SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
+        badges[#badges+1] = create_badge(localize('k_she_her'), SMODS.Gradients['ambray_transGrad'], SMODS.Gradients['ambray_transGradInv'], 1)
     end,
+    add_to_deck = function(self, card, from_debuff)
+        local left, right, oldleft, oldright = {}, {}, {}, {}
+        G.E_MANAGER:add_event(Event{
+            blockable = false,
+            blocking = false,
+            no_delete = true,
+            trigger = "after",
+            delay = 1,
+            timer = "UPTIME",
+            func = function()
+                if card.area and card.area.cards and #card.area.cards > 1 then
+                    for i = 1, #card.area.cards do
+                        if card.area.cards[i] == card then
+                            oldleft, oldright = left, right
+                            left = card.area.cards[i-1]
+                            right = card.area.cards[i+1]
+                            if oldleft ~= left then
+                                Spectrallib.manipulate(oldleft, {value = 1, dont_stack = true})
+                                Spectrallib.manipulate(left, {value = card.ability.extra.left, dont_stack = false})
+                            end
+                            if oldright ~= right then
+                                Spectrallib.manipulate(oldright, {value = 1, dont_stack = true})
+                                Spectrallib.manipulate(right, {value = card.ability.extra.right, dont_stack = false})
+                            end
+                            if Ambray.getKey(right) == 'j_ambray_meow' then
+                                Spectrallib.manipulate(right, {value = 2, dont_stack = false})
+                                Spectrallib.manipulate(card, {value = 2, dont_stack = false})
+                            end
+                            if Ambray.getKey(left) == 'j_ambray_meow' then
+                                Spectrallib.manipulate(left, {value = 2, dont_stack = false})
+                                Spectrallib.manipulate(card, {value = 2, dont_stack = false})
+                            end
+                            if card.ability.extra.killme then
+                                Spectrallib.manipulate(right, {value = 1, dont_stack = true})
+                                Spectrallib.manipulate(left, {value = 1, dont_stack = true})
+                            end
+                        end
+                    end
+                end
+                if card.ability.extra.killme then return true end
+            end
+        })
+    end,
+    load = function(self, card)
+        local left, right, oldleft, oldright = {}, {}, {}, {}
+        G.E_MANAGER:add_event(Event{
+            blockable = false,
+            blocking = false,
+            no_delete = true,
+            trigger = "after",
+            delay = 1,
+            timer = "UPTIME",
+            func = function()
+                if card.area and card.area.cards and #card.area.cards > 1 then
+                    for i = 1, #card.area.cards do
+                        if card.area.cards[i] == card then
+                            oldleft, oldright = left, right
+                            left = card.area.cards[i-1]
+                            right = card.area.cards[i+1]
+                            if oldleft ~= left then
+                                Spectrallib.manipulate(oldleft, {value = 1, dont_stack = true})
+                                Spectrallib.manipulate(left, {value = card.ability.extra.left, dont_stack = false})
+                            end
+                            if oldright ~= right then
+                                Spectrallib.manipulate(oldright, {value = 1, dont_stack = true})
+                                Spectrallib.manipulate(right, {value = card.ability.extra.right, dont_stack = false})
+                            end
+                            if Ambray.getKey(right) == 'j_ambray_meow' then
+                                Spectrallib.manipulate(right, {value = 2, dont_stack = false})
+                                Spectrallib.manipulate(card, {value = 2, dont_stack = false})
+                            end
+                            if Ambray.getKey(left) == 'j_ambray_meow' then
+                                Spectrallib.manipulate(left, {value = 2, dont_stack = false})
+                                Spectrallib.manipulate(card, {value = 2, dont_stack = false})
+                            end
+                            if card.ability and card.ability.extra and card.ability.extra.killme then
+                                Spectrallib.manipulate(right, {value = 1, dont_stack = true})
+                                Spectrallib.manipulate(left, {value = 1, dont_stack = true})
+                            end
+                        end
+                    end
+                end
+                if card.ability and card.ability.extra and card.ability.extra.killme then return true end
+            end
+        })
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        card.ability.extra.killme = true
+    end
 }

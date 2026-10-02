@@ -1,5 +1,4 @@
-Ambray = {}
-Ambray.config = SMODS.current_mod.config
+Ambray = SMODS.current_mod
 
 local folder = SMODS.NFS.getDirectoryItems(SMODS.current_mod.path .. "modules")
 for _, file in ipairs(folder) do
@@ -9,7 +8,7 @@ end
 Ambray.saved = {false}
 Ambray.yuriTrigger = false
 if not Ambray.config.musicK then
-    SMODS.current_mod.optional_features = {
+    Ambray.optional_features = {
         cardareas = {G.deck, G.discard}
     }
 
@@ -19,13 +18,14 @@ if not Ambray.config.musicK then
         assert(SMODS.load_file("objects/" .. file))()
     end
 
-    SMODS.current_mod.calculate = function(self, context)
+   Ambray.calculate = function(self, context)
         --this has to be here bc G.GAME gets reset when a game gets started
         G.GAME.ambray_drag = Ambray.draggableRemember
         G.GAME.ambray_cards_bought = G.GAME.ambray_cards_bought or {consumables = 0, jokers = 0, vouchers = 0}
         G.GAME.ambrayAutumnCards = G.GAME.ambrayAutumnCards or {}
+
         if context.buying_card and context.card.ability.set == 'Voucher' then
-            G.GAME.ambray_cards_bought.vouchers = (G.GAME.ambray_cards_bought.vouchers or 0) + 1
+            G.GAME.ambray_cards_bought.vouchers = G.GAME.ambray_cards_bought.vouchers or 0
         end
         if context.card_added then
             if not Ambray.contains(G.GAME.ambray_cards_bought, context.card.config.center.key) then

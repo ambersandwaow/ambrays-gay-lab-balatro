@@ -14,8 +14,7 @@ function Ambray.kill_game()
             type = "kill",
         })
     end
-
-    assert(require"lovely".reload_patches())
+    assert(require "lovely".reload_patches())
     love.event.quit()
 end
 
@@ -35,7 +34,7 @@ function Ambray.findPos(table, val)
             return index
         end
     end
-    return nil
+    return false
 end
 
 function Ambray.removeFromTable(tabel, val)
@@ -45,12 +44,6 @@ function Ambray.removeFromTable(tabel, val)
         return true
     end
     return false
-end
-
---laziest function ive ever made :fire:
-function Card:ambrayAdd(table)
-    if not table or type(table) ~= 'table' then return end
-    table[#table+1] = self
 end
 
 --wtf does imp and gobaling mean :sob:
@@ -66,11 +59,8 @@ function Ambray.copyCardTable(imp)
     return gobaling
 end
 
-function Ambray.geyKey(card)
-    if not (card and card.config and card.config.center and card.config.center.key) then
-        return false
-    end
-    return card.config.center.key
+function Ambray.getKey(card)
+    return card and card.config and card.config.center and card.config.center.key
 end
 
 local funnyJokers = {'j_gros_michel','j_ambray_pupa','j_joker','j_credit_card','j_mr_bones','j_ambray_ralsei'}
@@ -88,7 +78,7 @@ function Ambray.funny(single, card, args)
         elseif idk == 'Voucher' then args.vouchers = true
         elseif idk == ('Booster' or 'Default' or 'Enhanced') then args.decks = true args.consumables = true
         end
-    elseif not args then
+    elseif args == {} then
         args.jokers = true
         args.consumables = true
         args.decks = true
@@ -126,7 +116,11 @@ end
 
 function G.FUNCS.ambrayGayLink()
     G.FUNCS.go_to_menu()
-    love.system.openURL("https://docs.google.com/forms/d/e/1FAIpQLSdS3YvoZdJ_nOEylA4jYXcA6ATGDLdlzuFpu_laprZT3zwtAA/viewform?usp=publish-editor")
+    love.system.openURL("https://forms.gle/cczkfYG75Q5WBk8aA")
+end
+
+function G.FUNCS.ambraySpanishTranslation()
+    love.system.openURL("https://forms.gle/B8oRimXYQBz6eniS6")
 end
 
 function G.FUNCS.ambrayMusicCycle(e) --stolen from spectrallib :)
@@ -145,7 +139,16 @@ function G.FUNCS.ambrayEnableDraggable()
     end
 end
 
-function Ambray.is_playing_card(card) --this is stolen directly from smods since it only exists in a version unsupported by multiplayer
+function G.FUNCS.ambray_select_quest(e, mute, nosave)
+    SMODS.destroy_cards(G.quests.cards)
+    Ambray.simpleEvent(function()
+        G.FUNCS.use_card(e, mute, nosave)
+        return true
+    end, #G.quests.cards >= 1 and 0.75 or 0)
+end
+
+--this is stolen directly from smods since it only exists in a version unsupported by multiplayer
+function Ambray.is_playing_card(card)
     if not type(card) == "table" then return false end
 	local set = (card.ability or {}).set or ((card.config or {}).center or {}).set
 	return card.playing_card or set == "Default" or set == "Enhanced"
@@ -168,7 +171,7 @@ function Ambray.make_tooltip(name, vars)
         key = name,
         set = 'ambray_tooltips',
         no_collection = true,
-        loc_vars = function (self, info_queue, card)
+        loc_vars = function(self, info_queue, card)
             return{vars = {vars}}
         end
     }
@@ -177,17 +180,12 @@ end
 function Ambray.destroyWhiteSeals()
     for i = 1, #G.deck.cards do
         if G.deck.cards[i]:get_seal() == 'ambray_white' then
-            return{
-                G.E_MANAGER:add_event(Event({
-                    delay = 0.4,
-                    func = function()
-                        G.deck:juice_up(1,2)
-                        play_sound('ambray_boom')
-                        SMODS.destroy_cards(G.deck.cards[i])
-                        return true
-                    end
-                }))
-            }
+            Ambray.simpleEvent(function()
+                G.deck:juice_up(1,2)
+                play_sound('ambray_boom')
+                SMODS.destroy_cards(G.deck.cards[i])
+                return true
+            end, 0.4)
         end
     end
 end
@@ -261,23 +259,29 @@ function Ambray.simpleEvent(func, delay, blocking, blockable, trigger)
 end
 
 --returns a table of all highlighted cards and a table of all cardareas with highlighted cards in them
-function Ambray.getHighlightedCards(areas)
-    local bleh = {}
-    local graa = {}
+function Ambray.getHighlightedCards(remove, areas)
+    local bleh, graa, nuhuh, nuh = {}, {}, false, false
     if not areas then
         areas = {}
         for _,i in pairs(G.I.CARDAREA) do
-            areas:amrbayAdd(i)
+            areas[#areas+1] = i
         end
     end
     if type(areas) ~= 'table' then
         areas = {areas}
     end
-    for _,i in ipairs(areas) do
+    for _,i in pairs(areas) do
         if i.highlighted then
-            graa:ambrayAdd(i)
-            for _,j in ipairs(i.highlighted) do
-                bleh:ambrayAdd(j)
+            for _,j in pairs(i.highlighted) do
+                if j == remove then
+                    nuh = true
+                else
+                    nuhuh = true
+                    bleh[#bleh+1] = j
+                end
+            end
+            if nuh and not nuhuh then
+                graa[#graa+1] = i
             end
         end
     end
@@ -292,60 +296,47 @@ function Card:ambraySetRank(rank)
     self.base.id = rank.id
 end
 
-function Card:ambraySetAbility(ability)
-    self:set_ability(ability)
-    self.ambray_remove_children = true
-    if self.children and self.children.front then
-        self.children.front:remove()
-        self.children.front = nil
-    end
-end
-
-function Ambray.shouldntDiscard(card)
-    if card:shouldStealOverride() or card.config.center.shouldntDiscard then
-        return true
-    end
-end
-
-function Card:shouldDragOverride()
-    if self:shouldStealOverride() then return true end
-    if self.config and self.config.center and self.config.center.key == 'j_ambray_miasBaby' and self.area then return true end
-    if SMODS.has_enhancement(self,'m_gaia_amber') or SMODS.has_enhancement(self,'m_gaia_gaia') or
-    SMODS.has_enhancement(self,'m_gaia_amberv1') or SMODS.has_enhancement(self,'m_gaia_gaiav1') then
-        return true
-    end
-    --hook this function to add your own centers to override drag restrictions
-    return false
-end
-
-function Card:shouldStealOverride()
-    if self.edition and self.edition.ambray_distraction then return true end
-    if SMODS.has_enhancement(self,'m_gaia_amber') or SMODS.has_enhancement(self,'m_gaia_gaia') or
-    SMODS.has_enhancement(self,'m_gaia_amberv1') or SMODS.has_enhancement(self,'m_gaia_gaiav1') then
-        return true
-    end
-    --hook this function to add your own centers to override theft restrictions
-    return false
-end
-
-function Ambray.shouldActuallyHideDesc(card)
-    if not card then return false end
-    if card.ambrayShouldHideDesc then return true end
-    if card.edition and (card.edition.ambray_aberrance or card.edition.ambrayShouldHideDesc) then return true end
-    --hook this function to add your own centers to completely hide description
-    return false
-end
-
 function Card:shouldDragToNowhere()
-    if self.config.center.key == 'j_ambray_miasBaby' then return true end
-    if SMODS.has_enhancement(self, 'm_gaia_amber') or SMODS.has_enhancement(self, 'm_gaia_gaia') or
+    if G.VIEWING_DECK or G.SETTINGS.paused then return false end
+    if self.ambray_drag_nowhere then return true
+    elseif SMODS.has_enhancement(self, 'm_gaia_amber') or SMODS.has_enhancement(self, 'm_gaia_gaia') or
     SMODS.has_enhancement(self, 'm_gaia_amberv1') or SMODS.has_enhancement(self, 'm_gaia_gaiav1') then
         return true
     end
     return false
 end
 
-function Ambray.shouldDrag(card,area)
+--hook this function to add your own centers to completely hide description
+function Ambray.shouldActuallyHideDesc(card)
+    if not card then return false end
+    if card.ambrayShouldHideDesc then return true end
+    if card.edition and (card.edition.ambray_aberrance or card.edition.ambrayShouldHideDesc) then return true end
+    return false
+end
+
+--hook this function to add your own centers to override drag restrictions
+function Card:shouldDragOverride()
+    if self:shouldStealOverride() then return true end
+    if self.ambray_drag_override then return true end
+    if SMODS.has_enhancement(self,'m_gaia_amber') or SMODS.has_enhancement(self,'m_gaia_gaia') or
+    SMODS.has_enhancement(self,'m_gaia_amberv1') or SMODS.has_enhancement(self,'m_gaia_gaiav1') then
+        return true
+    end
+    return false
+end
+
+--hook this function to add your own centers to override theft restrictions
+function Card:shouldStealOverride()
+    if self.ambray_steal_override then return true end
+    if self.edition and self.edition.ambray_distraction then return true end
+    if SMODS.has_enhancement(self,'m_gaia_amber') or SMODS.has_enhancement(self,'m_gaia_gaia') or
+    SMODS.has_enhancement(self,'m_gaia_amberv1') or SMODS.has_enhancement(self,'m_gaia_gaiav1') then
+        return true
+    end
+    return false
+end
+
+function Ambray.shouldDrag(card, area)
     area = area or G.jokers
     if G.VIEWING_DECK or G.SETTINGS.paused or (area == G.hand and G.STATE == G.STATES.SHOP) then return false end
     if card and card:shouldDragOverride() or G.GAME.ambray_drag then return true end
@@ -358,15 +349,13 @@ function Ambray.shouldSteal(card)
     return false
 end
 
-function Ambray.toPlayingCard(card,area,rank,suit)
-    local awoo
-    area = area or G.hand
-    local base = pseudorandom_element(G.P_CARDS,pseudoseed("toPlayingCard"))
+function Ambray.toPlayingCard(card, rank, suit)
     if not card then return false end
+    if Ambray.is_playing_card(card) then
+        return card
+    end
+    local base = pseudorandom_element(G.P_CARDS, pseudoseed("toPlayingCard"))
     Ambray.simpleEvent(function()
-        if Ambray.is_playing_card(card) then
-            return true
-        end
         card:set_base(base)
         if rank then
             card:ambraySetRank(rank)
@@ -374,16 +363,14 @@ function Ambray.toPlayingCard(card,area,rank,suit)
         if suit then
             card:change_suit(suit)
         end
-        if card.children and card.children.front then
-            card.children.front:remove()
-            card.children.front = nil
-        end
+        card.ambray_remove_children = true
         return true
     end)
-    return awoo or card
+    return card
 end
 
---this was mostly copy pasted from vanilla
+--this was mostly copy pasted from aikoyori
+--which was itself mostly copy pasted from vanilla
 function Ambray.sendCard(from, to, card, percent, dir, sort, delay, mute, stay_flipped, vol, discarded_only, forced_facing)
     if not to or not to.cards then return true end
     percent = percent or 50
@@ -393,167 +380,130 @@ function Ambray.sendCard(from, to, card, percent, dir, sort, delay, mute, stay_f
     end
     sort = sort or false
     local drawn = nil
-
-    G.E_MANAGER:add_event(Event({
-        trigger = 'before',
-        delay = delay,
-        blocking = not (G.SETTINGS.GAMESPEED >= 999 and ((to == G.hand and from == G.deck) or (to == G.deck and from == G.hand))),
-        func = function()
-            if not to or not to.cards then return true end
-            if card then
-                if from == G.hand or from == G.deck then
-                    Ambray.removeFromTable(G.playing_cards, card)
-                end
-                if from then card = from:remove_card(card) end
-                if card then drawn = true end
-                if card and to == G.hand and not card.states.visible then
-                    card.states.visible = true
-                end
-                if to then
-                    card = Ambray.toPlayingCard(card,to)
-                    if card and not card.area then
-                        to:emplace(card)
+    Ambray.simpleEvent(function()
+        if not to or not to.cards then return true end
+        if card then
+            if from == G.hand or from == G.deck then
+                Ambray.removeFromTable(G.playing_cards, card)
+            end
+            if from then
+                for _, cardarea in ipairs(G.I.CARDAREA) do
+                    if cardarea and cardarea.cards then
+                        cardarea:remove_card(card)
                     end
                 end
-                if card and forced_facing then
-                    card.sprite_facing = forced_facing
-                    card.facing = forced_facing
-                end
-            else
-                if not to then return true end
-                card = to:draw_card_from(from, stay_flipped, discarded_only)
-                if card then drawn = true end
-                if card and to == G.hand and not card.states.visible then
-                    card.states.visible = true
-                end
-                if card and forced_facing then
-                    card.sprite_facing = forced_facing
-                    card.facing = forced_facing
-                end
             end
-            if not mute and drawn then
-                if from == G.deck or from == G.hand or from == G.play or from == G.jokers or from == G.consumeables or from == G.discard then
-                    G.VIBRATION = G.VIBRATION + 0.6
+            if card then drawn = true end
+            if card and to == G.hand and not card.states.visible then
+                card.states.visible = true
+            end
+            if to then
+                card = Ambray.toPlayingCard(card)
+                if card and not card.area then
+                    to:emplace(card)
                 end
-                play_sound('card1', 0.85 + percent*0.2/100, 0.6*(vol or 1))
-            end
-            if sort then
-                to:sort()
-            end
-            SMODS.drawn_cards = SMODS.drawn_cards or {}
-            if card and card.playing_card then SMODS.drawn_cards[#SMODS.drawn_cards+1] = card end
-            if to == (G.deck or G.hand) then
-                card:ambrayAdd(G.playing_cards)
             end
             if card and forced_facing then
-                card.facing = forced_facing
                 card.sprite_facing = forced_facing
+                card.facing = forced_facing
             end
-            return true
+        else
+            if not to then return true end
+            card = to:draw_card_from(from, stay_flipped, discarded_only)
+            if card then drawn = true end
+            if card and to == G.hand and not card.states.visible then
+                card.states.visible = true
+            end
+            if card and forced_facing then
+                card.sprite_facing = forced_facing
+                card.facing = forced_facing
+            end
         end
-      }))
+        if not mute and drawn then
+            if from == G.deck or from == G.hand or from == G.play or from == G.jokers or from == G.consumeables or from == G.discard then
+                G.VIBRATION = G.VIBRATION + 0.6
+            end
+            play_sound('card1', 0.85 + percent * 0.2 / 100, 0.6 * (vol or 1))
+        end
+        if sort then to:sort() end
+        SMODS.drawn_cards = SMODS.drawn_cards or {}
+        if card and card.playing_card then SMODS.drawn_cards[#SMODS.drawn_cards+1] = card end
+        if to == (G.deck or G.hand) then
+            G.playing_cards[#G.playing_cards+1] = card
+        end
+        if card and forced_facing then
+            card.facing = forced_facing
+            card.sprite_facing = forced_facing
+        end
+        return true
+    end, delay, not (G.SETTINGS.GAMESPEED >= 999 and ((to == G.hand and from == G.deck) or (to == G.deck and from == G.hand))), nil, 'before')
 end
 
 --putting this at the bottom bc it sucks
 function Ambray.quest()
-    local quack = math.random(1,13) --yeah i know you should use pseudorandom_probability but i dont want it to be seeded
+    local quack = math.random(1,13)
     if quack == 1 then
         if G.GAME.blind.in_blind then
             SMODS.add_card({set = 'Playing Card', no_edition = true, enhancement = 'm_ambray_tree'})
         end
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_eggDelta')
-                return true
-            end
-        }))
-    end
-    if quack == 2 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_tenna')
-                return true
-            end
-        }))
-    end
-    if quack == 3 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_myKing')
-                return true
-            end
-        }))
-    end
-    if quack == 4 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_glue')
-                return true
-            end
-        }))
-    end
-    if quack == 5 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_imFalling')
-                return true
-            end
-        }))
-    end
-    if quack == 6 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_splat')
-                return true
-            end
-        }))
-    end
-    if quack == 7 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_sustingus')
-                return true
-            end
-        }))
-    end
-    if quack == 8 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_itsMyJarona')
-                return true
-            end
-        }))
-    end
-    if quack == 9 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_jaOrange')
-                return true
-            end
-        }))
-    end
-    if quack == (10 or 11) then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_sax')
-                return true
-            end
-        }))
-    end
-    if quack == 12 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_eatingMyFlesh')
-                return true
-            end
-        }))
-    end
-    if quack == 13 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('ambray_lady')
-                return true
-            end
-        }))
+        Ambray.simpleEvent(function()
+            play_sound('ambray_eggDelta')
+            return true
+        end)
+    elseif quack == 2 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_tenna')
+            return true
+            end)
+    elseif quack == 3 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_myKing')
+            return true
+        end)
+    elseif quack == 4 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_glue')
+            return true
+        end)
+    elseif quack == 5 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_imFalling')
+            return true
+        end)
+    elseif quack == 6 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_splat')
+            return true
+        end)
+    elseif quack == 7 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_sustingus')
+            return true
+        end)
+    elseif quack == 8 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_itsMyJarona')
+            return true
+        end)
+    elseif quack == 9 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_jaOrange')
+            return true
+        end)
+    elseif quack == (10 or 11) then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_sax')
+            return true
+        end)
+    elseif quack == 12 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_eatingMyFlesh')
+            return true
+        end)
+    elseif quack == 13 then
+        Ambray.simpleEvent(function()
+            play_sound('ambray_lady')
+            return true
+        end)
     end
 end

@@ -69,32 +69,30 @@ SMODS.Consumable{--Doki Hunter
     end
 }
 
-SMODS.Back{--Yuri Deck
-    key = 'yuri',
+SMODS.Back{--Mesmerizer Deck
+    key = 'mesmerizer',
     atlas = 'decks',
-    pos = {x=1,y=0},
-    name = 'Yuri Deck',
+    pos = {x = 1, y = 0},
+    name = 'Mesmerizer Deck',
     unlocked = false,
     order = 81,
     dependencies = 'GAIAMOD',
-    set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Gaia', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Gaia', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
-    calculate = function(self,back,context)
+    calculate = function(self, back, context)
         if context.setting_blind and G.GAME.round == 1 then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    G.deck:shuffle('yurideck >.<')
-                    for i = 10, 1, -1 do
-                        G.deck.cards[i]:change_suit("gaia_Dokis")
-                    end
-                    local bwaa = SMODS.add_card({set='Enhanced',area=G.deck})
-                    local awawa = SMODS.add_card({set='Enhanced',area=G.deck})
-                    bwaa:set_ability('m_ambray_gaia')
-                    awawa:set_ability('m_ambray_ambray')
-                    return true
+            Ambray.simpleEvent(function()
+                G.deck:shuffle('yurideck >.<')
+                for i = 8, 1, -1 do
+                    G.deck.cards[i]:change_suit("gaia_Dokis")
                 end
-            }))
+                local bwaa = SMODS.add_card({set = 'Enhanced', area = G.deck})
+                local awawa = SMODS.add_card({set = 'Enhanced', area = G.deck})
+                bwaa:set_ability('m_ambray_gaia')
+                awawa:set_ability('m_ambray_ambray')
+                return true
+            end)
         end
     end,
     check_for_unlock = function(self,args)
@@ -109,7 +107,7 @@ SMODS.Consumable{--Daydream
     pos = {x = 4, y = 0},
     dependencies = 'GAIAMOD',
     set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
     config = {extra = {max_highlighted = 3, edition = 'e_ambray_distraction'}},
     loc_vars = function(self,info_queue,card)

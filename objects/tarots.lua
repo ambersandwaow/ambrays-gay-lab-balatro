@@ -1,4 +1,3 @@
-local config = Ambray.config
 SMODS.Consumable{--Page of Wands
     key = 'PoW',
     set = 'Tarot',
@@ -7,7 +6,7 @@ SMODS.Consumable{--Page of Wands
     discovered = true,
     config = {max_highlighted=1,mod_conv='m_ambray_lost',extra={money=5}},
     set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
     loc_vars = function(self,info_queue,card)
         info_queue[#info_queue + 1] = {key='c_ambray_lostTip',set='ambray_tooltips'}
@@ -87,7 +86,7 @@ SMODS.Consumable{--Knight of Wands
     discovered = true,
     config = {max_highlighted=1,mod_conv='m_ambray_lost',extra={money=5}},
     set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
     loc_vars = function(self,info_queue,card)
         return { vars = {
@@ -124,7 +123,7 @@ SMODS.Consumable{--Knight of Wands
                 trigger = 'after',
                 delay = 0.1,
                 func = function()
-                    G.hand.highlighted[i]:ambraySetAbility(Ambray.funny(true))
+                    G.hand.highlighted[i]:set_ability(Ambray.funny(true))
                     return true
                 end
             }))
@@ -170,7 +169,7 @@ SMODS.Consumable{--Queen of Wands
     discovered = true,
     config = {max_highlighted=1,mod_conv='m_ambray_gaia',mod_conv2='m_ambray_ambray'},
     set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
     loc_vars = function(self,info_queue,card)
         info_queue[#info_queue + 1] = {key='c_ambray_gaiaTip',set='ambray_tooltips'}
@@ -250,14 +249,11 @@ SMODS.Consumable{--King of Wands
     key = 'KioW',
     set = 'Tarot',
     atlas = 'consumables',
-    pos = {x=3,y=2},
-    set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+    pos = {x = 3, y = 2},
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
-    in_pool = function(self,args)
-        if G.GAME.ambray_drag then return false end
-    end,
-    use = function(self,card,area,copier)
+    use = function(self, card, area, copier)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -272,15 +268,13 @@ SMODS.Consumable{--King of Wands
             trigger = 'after',
             delay = 0.1,
             func = function()
-                local rember = Ambray.getHighlightedCards()
-                Ambray.removeFromTable(rember,card)
+                local rember = Ambray.getHighlightedCards(card)
+                Ambray.removeFromTable(rember, card)
                 if not rember then return true end
                 local bingus = rember[1][1]
                 local awawa = rember[1][2]
-                local bwee = rember[2][1]
-                local argg = rember[2][2]
-                Ambray.sendCard(bwee,argg,bingus,nil,'down',nil,0)
-                Ambray.sendCard(argg,bwee,awawa,nil,'up',nil,0)
+                Ambray.sendCard(bingus.area, awawa.area, bingus)
+                Ambray.sendCard(awawa.area, bingus.area, awawa)
                 play_sound('tarot2', 1, 0.6)
                 return true
             end
@@ -302,20 +296,20 @@ SMODS.Tarot:take_ownership('wheel_of_fortune', {
             info_queue[#info_queue+1] = G.P_CENTERS.e_foil
             info_queue[#info_queue+1] = G.P_CENTERS.e_holo
             info_queue[#info_queue+1] = G.P_CENTERS.e_polychrome
-            info_queue[#info_queue+1] = G.P_CENTERS.e_ambray_misprint
+            info_queue[#info_queue+1] = G.P_CENTERS.e_ambray_aberrance
         local numerator, denominator = SMODS.get_probability_vars(card, card.ability.extra.num, card.ability.extra.odds, 'wheel_of_fortune')
         return{vars = {numerator, denominator}}
     end,
     use = function(self, card, area, copier)
         local editionless_jokers = SMODS.Edition:get_edition_cards(G.jokers, true)
         local eligible_card = pseudorandom_element(editionless_jokers, 'wheel_of_fortune')
-        local edition = 'e_ambray_misprint'
+        local edition = 'e_ambray_aberrance'
         if SMODS.pseudorandom_probability(card, 'wheel_of_fortune', card.ability.extra.num, card.ability.extra.odds) then
             --since smods automatically sets the editions for poll_edition for 'wheel_of_fortune' and 'aura' keys i dont have to specify them
             edition = SMODS.poll_edition{key = "wheel_of_fortune", guaranteed = true, no_negative = true}
-        else
-            eligible_card:set_edition(edition, true)
-            check_for_unlock{type = 'have_edition'}
         end
+        eligible_card:set_edition(edition, true)
+        check_for_unlock{type = 'have_edition'}
+        SMODS.calculate_context{wheel_used = true, edicion = edition}
     end,
 }, false)

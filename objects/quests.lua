@@ -3,7 +3,7 @@ local config = Ambray.config
 SMODS.ConsumableType {
     key = 'ambray_quest',
     default = 'c_ambray_yuri',
-    collection_rows = { 4, 5 },
+    collection_rows = {4, 5},
     primary_colour = HEX('004e4e'),
     secondary_colour = HEX('00aeae'),
     shop_rate = 3,
@@ -25,8 +25,8 @@ SMODS.Consumable{--Yuri
     atlas = 'consumables',
     pos = {x=0,y=0},
     cost = 4,
-    loc_vars = function(self,info_queue,card)
-        info_queue[#info_queue+1] = { key = 'c_ambray_quests', set = 'ambray_tooltips'}
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {key = 'c_ambray_quests', set = 'ambray_tooltips'}
         info_queue[#info_queue+1] = {key = 'c_ambray_gaiaTip', set = 'ambray_tooltips'}
         info_queue[#info_queue+1] = {key = 'c_ambray_ambrayTip', set = 'ambray_tooltips'}
         if config ~= nil then
@@ -47,13 +47,11 @@ SMODS.Consumable{--Yuri
     calculate = function(self,card,context)
         if context.final_scoring_step then
             if Ambray.yuriTrigger then -- comes from m_ambray_gaia
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:juice_up(1,3)
-                        play_sound('ambray_yippie')
-                        return true
-                    end
-                }))
+                Ambray.simpleEvent(function()
+                    card:juice_up(1, 3)
+                    play_sound('ambray_yippie')
+                    return true
+                end)
                 SMODS.destroy_cards(card)
                 return{message = 'yippie!',dollars = Ambray.questReward}
             end
@@ -85,13 +83,11 @@ SMODS.Consumable{--Universal Basic Income
     end,
     calculate = function(self,card,context)
         if context.money_altered and ((G.GAME.dollars or 0) + (G.GAME.dollar_buffer or 0) + context.amount) <= card.ability.extra.limit then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    card:juice_up(1,3)
-                    play_sound('ambray_yippie')
-                    return true
-                end
-            }))
+            Ambray.simpleEvent(function()
+                card:juice_up(1, 3)
+                play_sound('ambray_yippie')
+                return true
+            end)
             SMODS.destroy_cards(card)
             return{message='yippie!',dollars=Ambray.questReward+card.ability.extra.extraDollars}
         end
@@ -146,13 +142,11 @@ SMODS.Consumable{--Minimalism
     calculate = function(self,card,context)
         if context.remove_playing_cards then
             if #G.playing_cards <= card.ability.extra.cardsInDeck+#context.removed then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:juice_up(1,3)
-                        play_sound('ambray_yippie')
-                        return true
-                    end
-                }))
+                Ambray.simpleEvent(function()
+                    card:juice_up(1, 3)
+                    play_sound('ambray_yippie')
+                    return true
+                end)
                 SMODS.destroy_cards(card)
                 return{message = 'yippie!',dollars = Ambray.questReward}
             end
@@ -186,23 +180,21 @@ SMODS.Consumable{--Study rename this
             localize{type = 'name_text', set = 'Tarot', key = card.ability.extra.tarot}
         }}
     end,
-    add_to_deck = function(self,card)
+    add_to_deck = function(self, card)
         if G.consumeables and #G.consumeables.cards < G.consumeables.config.card_limit then
-            SMODS.add_card({set='Tarot',key=card.ability.extra.tarot})
+            SMODS.add_card{set = 'Tarot', key = card.ability.extra.tarot}
         end
     end,
-    calculate = function(self,card,context)
+    calculate = function(self, card, context)
         if context.after then
             if SMODS.is_poker_hand_visible('Flush House') then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:juice_up(1,3)
-                        play_sound('ambray_yippie')
-                        return true
-                    end
-                }))
+                Ambray.simpleEvent(function()
+                    card:juice_up(1, 3)
+                    play_sound('ambray_yippie')
+                    return true
+                end)
                 SMODS.destroy_cards(card)
-                return{message = 'yippie!',dollars = Ambray.questReward}
+                return{message = 'yippie!', dollars = Ambray.questReward}
             end
         end
     end,
@@ -212,13 +204,13 @@ SMODS.Consumable{--Study rename this
     keep_on_use = function()
         return true
     end,
-    use = function(self,card,area,copier)
+    use = function(self, card, area, copier)
         Ambray.quest()
     end,
-    can_sell = function(self,card,context)
+    can_sell = function(self, card, context)
         return false
     end,
-    check_for_unlock = function(self,args)
+    check_for_unlock = function(self, args)
         if args.type == 'hand_contents' then
             if SMODS.is_poker_hand_visible('Flush House') and SMODS.is_poker_hand_visible('Flush Five')
             and SMODS.is_poker_hand_visible('Five of a Kind') then
@@ -231,23 +223,21 @@ SMODS.Consumable{--Transgenderrr
     key = 'trans',
     set = 'ambray_quest',
     atlas = 'consumables',
-    pos = {x=2,y=0},
+    pos = {x = 2, y = 0},
     cost = 4,
-    loc_vars = function(self,info_queue,card)
-        info_queue[#info_queue + 1] = { key = 'c_ambray_quests', set = 'ambray_tooltips'}
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = {key = 'c_ambray_quests', set = 'ambray_tooltips'}
     end,
     calculate = function(self,card,context)
         if context.change_rank then
             if tostring(context.old_rank) == ('12' or '11') then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:juice_up(1,3)
-                        play_sound('ambray_yippie')
-                        return true
-                    end
-                }))
+                Ambray.simpleEvent(function()
+                    card:juice_up(1, 3)
+                    play_sound('ambray_yippie')
+                    return true
+                end)
                 SMODS.destroy_cards(card)
-                return{message = 'yippie!',dollars = Ambray.questReward}
+                return{message = 'yippie!', dollars = Ambray.questReward}
             end
         end
     end,
@@ -270,24 +260,28 @@ SMODS.Consumable{--Lets Go Gambling!!!
     atlas = 'consumables',
     pos = {x=2,y=1},
     cost = 4,
-    config={extra={tarot='c_wheel_of_fortune'}},
+    config = {extra = {
+        tarot = 'c_wheel_of_fortune',
+        edition = 'e_ambray_aberrance'
+    }},
     pixel_size = {w=71,h=35},
     loc_vars = function(self,info_queue,card)
-        info_queue[#info_queue + 1] = { key = 'c_ambray_quests', set = 'ambray_tooltips'}
-        info_queue[#info_queue + 1] = { key = card.ability.extra.tarot, set = 'Tarot',vars={1,4}}
-        return{vars={localize{type = 'name_text', set = 'Tarot', key = card.ability.extra.tarot}}}
+        info_queue[#info_queue + 1] = {key = 'c_ambray_quests', set = 'ambray_tooltips'}
+        info_queue[#info_queue + 1] = {key = card.ability.extra.tarot, set = 'Tarot', vars = {1, 3}}
+        return{vars = {
+            localize{type = 'name_text', set = 'Tarot', key = card.ability.extra.tarot},
+            localize{type = 'name_text', set = 'Edition', key = card.ability.extra.edition}
+        }}
     end,
     calculate = function(self,card,context)
-        if context.wheel_used then --why the fuck does this work??????
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    card:juice_up(1,3)
-                    play_sound('ambray_yippie')
-                    return true
-                end
-            }))
+        if context.wheel_used and context.edicion ~= card.ability.extra.edition then
+            Ambray.simpleEvent(function()
+                card:juice_up(1, 3)
+                play_sound('ambray_yippie')
+                return true
+            end)
             SMODS.destroy_cards(card)
-            return{message='yippie!',dollars=Ambray.questReward}
+            return{message = 'yippie!', dollars = Ambray.questReward}
         end
     end,
     can_use = function()
@@ -307,24 +301,21 @@ SMODS.Consumable{--Absurdism
     key = 'absurdism',
     set = 'ambray_quest',
     atlas = 'consumables',
-    pos = {x=3,y=1},
+    pos = {x = 3, y = 1},
     cost = 4,
-    in_pool = function(self,args) if config and not config.balanced and config.stupid then return true end return false end,
-    loc_vars = function(self,info_queue,card)
-        info_queue[#info_queue + 1] = { key = 'c_ambray_quests', set = 'ambray_tooltips'}
-        return{vars={localize{type = 'name_text', set = 'Tarot', key = 'c_death'}}}
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = {key = 'c_ambray_quests', set = 'ambray_tooltips'}
+        return{vars = {localize{type = 'name_text', set = 'Tarot', key = 'c_death'}}}
     end,
     calculate = function(self,card,context)
         if context.death_used and context.card.ability.set == 'Joker' then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    card:juice_up(1,3)
-                    play_sound('ambray_yippie')
-                    return true
-                end
-            }))
+            Ambray.simpleEvent(function()
+                card:juice_up(1, 3)
+                play_sound('ambray_yippie')
+                return true
+            end)
             SMODS.destroy_cards(card)
-            return{message='yippie!',dollars=Ambray.questReward}
+            return{message = 'yippie!', dollars = Ambray.questReward}
         end
     end,
     can_use = function()
@@ -341,7 +332,7 @@ SMODS.Consumable{--Absurdism
     end,
     check_for_unlock = function(self,args)
         if args.type == 'round_win' then
-            for _,i in ipairs(G.deck.cards) do
+            for _,i in pairs(G.deck.cards) do
                 if i.ability and i.ability.set and i.ability.set == 'Joker' then
                     return true
                 end

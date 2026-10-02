@@ -55,6 +55,7 @@ SMODS.Edition{
         Ambray.simpleEvent(function()
             card.ambrayShouldHideDesc = false
             card:set_ability(idk)
+            return true
         end, 1, false)
     end
 }

@@ -231,37 +231,15 @@ SMODS.Atlas{
 }
 SMODS.Sound{
     key = 'ambray_music_1',
-    path = 'mainMusic.mp3',
+    path = 'music.mp3',
     pitch = 1,
+    sync = false,
     select_music_track = function(self)
         if Ambray.config.musicType == 1 and not Ambray.config.musicR then
-            return 2
-        end
-        return nil
-    end
-}
-SMODS.Sound{
-    key = 'ambray_music_4',
-    path = 'shopMusic.mp3',
-    pitch = 1,
-    select_music_track = function(self)
-        if Ambray.config.musicType == 1 and not Ambray.config.musicR and G.STATE == G.STATES.SHOP then
             return 5
         end
         return nil
-    end
-}
-SMODS.Sound{
-    key = 'ambray_music_5',
-    path = 'bossMusic.mp3',
-    pitch = 1,
-    select_music_track = function(self)
-        if Ambray.config.musicType == 1 and not Ambray.config.musicR and G.GAME and G.GAME.blind and G.GAME.blind.in_blind and
-        (G.GAME.blind.boss or G.STATE == G.STATES.SMODS_BOOSTER_OPENED) then
-            return 5
-        end
-        return nil
-    end
+    end,
 }
 SMODS.Sound{
     key = 'ambray_music2_1',
@@ -314,6 +292,19 @@ SMODS.Sound{
     pitch = 1,
     select_music_track = function(self)
         if Ambray.config.musicType == 2 and not Ambray.config.musicR and G.GAME and G.GAME.blind and G.GAME.blind.in_blind and G.GAME.blind.boss then
+            return 5
+        end
+        return nil
+    end
+}
+SMODS.Sound{
+    key = 'ambray_music3',
+    path = 'domPalombi.mp3',
+    pitch = 1,
+    sync = false,
+    volume = 1.4,
+    select_music_track = function(self)
+        if Ambray.config.musicType == 3 and not Ambray.config.musicR then
             return 5
         end
         return nil

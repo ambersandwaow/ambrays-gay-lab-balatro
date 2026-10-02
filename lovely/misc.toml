@@ -1,0 +1,102 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 50
+
+
+#stolen from jokey pony (my little pony joker mod its fire)
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "_pool[#_pool + 1] = v.key"
+position = "before"
+payload = '''
+
+if G.GAME.selected_back.name == "Fuck My Stupid Chud Deck" then
+    if string.sub(v.key, 3, 8) == "ambray" or string.sub(v.key, 1,6) == 'ambray' then
+        for i = 1, 4 do
+            _pool[#_pool + 1] = v.key
+            _pool_size = _pool_size + 1
+        end
+    end
+elseif G.GAME.selected_back.name == "Mesmerizer Deck" then
+    if string.sub(v.key, 3,8) == "ambray" or string.sub(v.key, 1,6) == 'ambray' or string.sub(v.key, 1,4) == 'gaia' or string.sub(v.key, 1,4) == 'gaia' then
+        for i = 1, 3 do
+            _pool[#_pool + 1] = v.key
+            _pool_size = _pool_size + 1
+        end
+    end
+end
+'''
+match_indent = true
+
+
+#thanks to foo54 on discord for this, solved a ton of my problems
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+   end'''
+position = 'at'
+payload = '''
+    localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+    elseif _c.set == "ambray_tooltips" then
+        localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+    end
+'''
+match_indent = false
+
+
+[[patches]]
+[patches.pattern]
+target = 'main.lua'
+pattern = '''G.FPS_CAP = G.FPS_CAP or 500'''
+position = 'at'
+payload = '''
+if Ambray and Ambray.fpsOverride and type(Ambray.fpsOverride) == 'number' then
+    G.FPS_CAP = Ambray.fpsOverride
+else
+    G.FPS_CAP = G.FPS_CAP or 500
+end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''new_card:set_ability(other.config.center)'''
+position = 'at'
+payload = '''
+    if SMODS.has_enhancement(other, 'm_ambray_lost') then
+        SMODS.calculate_context({ambray_lostTrigger = true,card=other})
+        SMODS.destroy_cards(new_card)
+    else
+        new_card:set_ability(other.config.center)
+    end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''copy_card(rightmost, G.hand.highlighted[i])'''
+position = 'after'
+payload = '''
+SMODS.calculate_context({death_used = true, card = rightmost})
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''localize{type = 'other', key = 'undiscovered_'..(string.lower(_c.set)), set = _c.set, nodes = desc_nodes}'''
+position = 'at'
+payload = '''
+if not Ambray.shouldActuallyHideDesc(card) then
+    localize{type = 'other', key = 'undiscovered_'..(string.lower(_c.set)), set = _c.set, nodes = desc_nodes}
+end
+'''
+match_indent = true

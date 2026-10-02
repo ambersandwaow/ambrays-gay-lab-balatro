@@ -2,7 +2,7 @@
     "id": "ambray",
     "name": "ambrays gay lab",
     "display_name": "ambrays gay lab",
-    "author": ["ambray","gaia"],
+    "author": ["ambray", "gaia"],
     "description": "yeah ts kinda homosex",
     "prefix": "ambray",
     "main_file": "main.lua",
@@ -10,7 +10,7 @@
     "icon_path": "lesIcon.png",
     "badge_colour": "115544",
     "badge_text_colour": "DDDDDD",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "dependencies": [
         "Spectrallib (>=1)",
         "Steamodded (>=1.0.0~BETA-1620a)"

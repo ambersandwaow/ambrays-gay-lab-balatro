@@ -9,16 +9,16 @@ SMODS.Joker{--True Love's First Kiss
     cost = 20,
     rarity = 'ambray_waow',
     unlocked = true,
-    set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
     in_pool = function(self,args) if config ~= nil and config.balanced then return false else return true end end,
     config = {extra = {scalar = 0.05, current = 1}},
-    loc_vars=function(self,info_queue,card)if config ~= nil then
+    loc_vars = function(self, info_queue, card) if config ~= nil then
             if config.extraGay then
-                return{key = 'j_ambray_love_alt',vars = {card.ability.extra.scalar, card.ability.extra.current}}
+                return{key = 'j_ambray_love_alt', vars = {card.ability.extra.scalar, card.ability.extra.current}}
             else
-                return{key = 'j_ambray_love',vars = {card.ability.extra.scalar, card.ability.extra.current}}
+                return{key = 'j_ambray_love', vars = {card.ability.extra.scalar, card.ability.extra.current}}
             end
         end
     end,
@@ -50,13 +50,14 @@ SMODS.Joker{--5 Finger Discount
         end
     end,
     set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
-    in_pool = function(self,args) if config and not config.balanced and G.GAME.ambray_drag then return true end return false end,
+    in_pool = function(self,args) if config and not config.balanced and config.stupid then return true end return false end,
     add_to_deck = function(self,card,from_debuff) G.GAME.ambray_theft = true end,
+    load = function(self) G.GAME.ambray_theft = true end,
     remove_from_deck = function(self,card,from_debuff) G.GAME.ambray_theft = false end
 }
-SMODS.Joker{--The Trans Experience i want to make it so that the round doesnt end when your chips are over the req but it never worked
+SMODS.Joker{--The Trans Experience i wanted to make it so that the round doesnt end when your chips are over the req but it never worked
     key = 'transness',
     atlas = 'jokers',
     pos = {x = 6, y = 1},
@@ -66,10 +67,11 @@ SMODS.Joker{--The Trans Experience i want to make it so that the round doesnt en
     rarity = 'ambray_waow',
     discovered = false,
     blueprint_compat = false,
+	immutable = true, --so Spectrallib.manipulate() wont do anything to this (since itd probably break)
     set_badges = function(self,card,badges)
-        badges[#badges+1] = create_badge('art by: Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
+        badges[#badges+1] = create_badge(localize('k_ambray_artBy')..' Amber', SMODS.Gradients['ambray_credits'], G.C.UI.TEXT_LIGHT, 1)
     end,
-    config = {extra = {willWin = true, stinkyyy = 0, tally = 0, retrigCount = 0, timer = 90, lost = false, saver = 0}},
+    config = {extra = {willWin = true, stinkyyy = 0, tally = 0, retrigCount = 0, timer = 60, lost = false, saver = 0}},
     loc_vars = function(self,info_queue,card)
         local willWin
         if card.ability.extra.willWin == true then
@@ -93,12 +95,12 @@ SMODS.Joker{--The Trans Experience i want to make it so that the round doesnt en
                 colours = {willWin[2]}
             }}
         elseif card.ability.extra.stinkyyy == 3 then
-            return{key='j_ambray_transness3',vars = {
+            return{key = 'j_ambray_transness3', vars = {
                 card.ability.extra.timer, willWin[1],
                 colours = {willWin[2]}
             }}
         else
-            if next(SMODS.find_mod('Multiplayer')) then
+            if MP and MP.LOBBLY and MP.LOBBY.code then
                 info_queue[#info_queue+1] = {set = "Other", key = "ambray_transTip2"}
             end
             local a = (Ambray.transCards[1] or {rank = 'Ace', suit = 'Spades'})
@@ -112,24 +114,24 @@ SMODS.Joker{--The Trans Experience i want to make it so that the round doesnt en
             }}
         end
     end,
-    add_to_deck = function(self,card)
-        card.ability.extra.stinkyyy = pseudorandom('gamerr',1,2)
+    add_to_deck = function(self, card)
+        card.ability.extra.stinkyyy = pseudorandom('gamerr', 1, 2)
     end,
-    in_pool=function(self,args)
+    in_pool = function(self, args)
         if (config ~= nil and config.balanced) or (MP and MP.LOBBY and MP.LOBBY.code) then
             return false
         else
             return true
         end
     end,
-    calculate = function(self,card,context)
+    calculate = function(self, card, context)
         if context.end_of_round and context.main_eval then
             if card.ability.extra.willWin then
                 card.ability.extra.tally = 0
                 card.ability.extra.willWin = false
                 card.ability.extra.lost = false
                 card.ability.extra.saver = math.huge
-                card.ability.extra.stinkyyy = pseudorandom('gamerr',1,3)
+                card.ability.extra.stinkyyy = 3--pseudorandom('gamerr', 1, 3)
                 if context.game_over then
                     return{saved = ''}
                 end
@@ -138,13 +140,9 @@ SMODS.Joker{--The Trans Experience i want to make it so that the round doesnt en
             end
         end
         if G.GAME.blind.in_blind then
-            if card.ability.extra.stinkyyy == 0 then
-                card.ability.extra.willWin = true --for testing
-            elseif card.ability.extra.stinkyyy == 9 then
-                card.ability.extra.willWin = false
-            elseif card.ability.extra.stinkyyy == 1 then
+            if card.ability.extra.stinkyyy == 1 then
                 if context.individual and context.cardarea == G.play then
-                    for _,bleh in ipairs(Ambray.transCards) do
+                    for _,bleh in pairs(Ambray.transCards) do
                         if context.other_card.base.value == bleh.rank and context.other_card.base.suit == bleh.suit then
                             card.ability.extra.willWin = true
                             return{message = 'win!'}
@@ -152,10 +150,10 @@ SMODS.Joker{--The Trans Experience i want to make it so that the round doesnt en
                     end
                 end
             elseif card.ability.extra.stinkyyy == 2 then
-                card.ability.extra.retrigCount = 8+3*G.GAME.round_resets.ante
+                card.ability.extra.retrigCount = 8 + 3 * G.GAME.round_resets.ante
                 if context.individual and (context.cardarea == G.play or
-                (context.cardarea == G.hand and SMODS.has_enhancement(context.other_card,'m_steel') and not context.end_of_round)) then
-                    card.ability.extra.tally = card.ability.extra.tally+1
+                (context.cardarea == G.hand and SMODS.has_enhancement(context.other_card, 'm_steel') and not context.end_of_round)) then
+                    card.ability.extra.tally = card.ability.extra.tally + 1
                     if card.ability.extra.tally >= card.ability.extra.retrigCount then
                         card.ability.extra.willWin = true
                         return{message = 'win!'}
@@ -165,11 +163,19 @@ SMODS.Joker{--The Trans Experience i want to make it so that the round doesnt en
             elseif card.ability.extra.stinkyyy == 3 then
                 if context.first_hand_drawn then
                     card.ability.extra.saver = G.TIMERS.REAL
-                elseif G.TIMERS.REAL >= ((card.ability.extra.saver or G.TIMERS.REAL)+card.ability.extra.timer) then
+                    attention_text{
+                        text = tostring(card.ability.extra.timer)..' '..localize('k_ambray_seconds'),
+                        scale = 1.3,
+                        hold = 1.8,
+                        major = card,
+                        backdrop_colour = G.C.CHANCE,
+                        align = 'bm',
+                        offset = {x = 0, y = 0},
+                    }
+                elseif G.TIMERS.REAL >= ((card.ability.extra.saver or G.TIMERS.REAL) + card.ability.extra.timer) then
                     if not card.ability.extra.lost then
                         card.ability.extra.willWin = false
                         card.ability.extra.lost = true
-                        card.ability.extra.saver = nil
                         Ambray.loseRound()
                     end
                 else
